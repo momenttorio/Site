@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfólio — Momentto Rio</title>
+<meta name="description" content="Portfólio da Momentto Rio Produções — ensaios, festas e debutantes registrados no coração do Rio." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --brown:#3d2b1f;--brown-soft:#5a4433;--tan:#c8b49a;--tan-deep:#a8916f;
+    --cream:#f2ece3;--cream-warm:#ece3d5;--ink:#2a1d14;
+    --display:'Cormorant Garamond',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--cream);color:var(--brown);line-height:1.6;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--brown);color:var(--cream)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  a{color:inherit}
+
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;background:rgba(242,236,227,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(61,43,31,.08);
+  }
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--brown)}
+  .brand .logo-txt{font-family:var(--display);font-size:1.4rem;font-weight:600;letter-spacing:.02em;line-height:1}
+  .brand .logo-txt small{display:block;font-family:var(--body);font-size:.58rem;letter-spacing:.34em;text-transform:uppercase;color:var(--tan-deep);margin-top:3px}
+  nav.links{display:flex;gap:28px;align-items:center}
+  nav.links a{text-decoration:none;font-size:.82rem;letter-spacing:.04em;opacity:.8;transition:opacity .25s}
+  nav.links a:hover{opacity:1}
+  nav.links a.cta{background:var(--brown);color:var(--cream);padding:9px 18px;border-radius:999px;font-size:.78rem;opacity:1}
+  @media(max-width:720px){nav.links a:not(.cta){display:none}}
+
+  .head{
+    padding:140px 0 60px;text-align:center;position:relative;overflow:hidden;
+    background:radial-gradient(120% 90% at 50% 0%,rgba(200,180,154,.45),transparent 60%),linear-gradient(160deg,#efe7db,#e6dac8);
+  }
+  .head .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--tan-deep);margin-bottom:20px}
+  .head .eyebrow::before,.head .eyebrow::after{content:"";width:30px;height:1px;background:var(--tan-deep)}
+  .head h1{font-family:var(--display);font-weight:500;font-size:clamp(2.8rem,8vw,5.5rem);line-height:1;color:var(--brown)}
+  .head h1 em{font-style:italic;color:var(--tan-deep)}
+  .head p{margin:22px auto 0;max-width:52ch;color:var(--brown-soft);font-size:1.05rem}
+
+  .filters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:34px 0 0}
+  .filters button{
+    font-family:var(--body);font-size:.8rem;letter-spacing:.03em;cursor:pointer;
+    background:transparent;border:1px solid rgba(61,43,31,.25);color:var(--brown);
+    padding:8px 18px;border-radius:999px;transition:all .25s var(--ease);
+  }
+  .filters button:hover{border-color:var(--brown)}
+  .filters button.active{background:var(--brown);color:var(--cream);border-color:var(--brown)}
+
+  .gallery{padding:56px 0 100px}
+  .grid{columns:3;column-gap:16px}
+  @media(max-width:900px){.grid{columns:2}}
+  @media(max-width:560px){.grid{columns:1}}
+  figure{
+    break-inside:avoid;margin:0 0 16px;border-radius:8px;overflow:hidden;position:relative;cursor:pointer;
+    background:var(--cream-warm);box-shadow:0 14px 30px -20px rgba(61,43,31,.5);
+    opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease);
+  }
+  figure.in{opacity:1;transform:none}
+  figure img{display:block;width:100%;height:auto;transition:transform .6s var(--ease);background:var(--cream-warm)}
+  figure:hover img{transform:scale(1.04)}
+  figure figcaption{
+    position:absolute;left:0;right:0;bottom:0;padding:26px 16px 14px;color:var(--cream);
+    font-family:var(--display);font-style:italic;font-size:1.15rem;
+    background:linear-gradient(transparent,rgba(42,29,20,.72));opacity:0;transition:opacity .3s;
+  }
+  figure:hover figcaption{opacity:1}
+
+  .lightbox{
+    position:fixed;inset:0;z-index:100;background:rgba(28,19,13,.92);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:30px;
+  }
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:92vw;max-height:88vh;border-radius:6px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7)}
+  .lightbox .x,.lightbox .arrow{
+    position:absolute;background:rgba(242,236,227,.14);border:none;color:var(--cream);cursor:pointer;
+    width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s;
+  }
+  .lightbox .x{top:24px;right:24px}
+  .lightbox .arrow{top:50%;transform:translateY(-50%);font-size:1.6rem}
+  .lightbox .prev{left:20px}.lightbox .next{right:20px}
+  .lightbox button:hover{background:rgba(242,236,227,.28)}
+
+  footer{background:var(--ink);color:var(--cream);padding:60px 0 40px;text-align:center}
+  footer .logo-txt{font-family:var(--display);font-size:1.6rem;font-weight:600}
+  footer .tagline{font-family:var(--display);font-style:italic;font-size:1.2rem;color:var(--tan);margin:12px 0 26px}
+  footer .links{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;font-size:.9rem}
+  footer .links a{text-decoration:none;opacity:.85}
+  footer .links a:hover{opacity:1}
+  footer .base{margin-top:34px;font-size:.76rem;color:var(--tan);opacity:.75}
+
+  .wa{position:fixed;right:22px;bottom:22px;z-index:60;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px -8px rgba(0,0,0,.4);transition:transform .3s var(--ease)}
+  .wa:hover{transform:scale(1.08)}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="4"/>
+        <g stroke="currentColor" stroke-width="3.4" stroke-linejoin="round" fill="none">
+          <path d="M50 8 L68 40 H32 Z"/><path d="M92 50 L60 68 V32 Z"/><path d="M50 92 L32 60 H68 Z"/><path d="M8 50 L40 32 V68 Z"/>
+        </g>
+      </svg>
+    </span>
+    <span class="logo-txt">Momentto<small>Rio Produções</small></span>
+  </a>
+  <nav class="links">
+    <a href="index.html">Início</a>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#pacotes">Pacotes</a>
+    <a class="cta" id="ctaNav" href="#">Solicite seu Orçamento</a>
+  </nav>
+</header>
+
+<section class="head">
+  <div class="wrap">
+    <div class="eyebrow">Nosso trabalho</div>
+    <h1>Portf<em>ó</em>lio</h1>
+    <p>Uma seleção dos momenttos que eternizamos — ensaios, festas e debutantes registrados no coração do Rio.</p>
+    <div class="filters">
+      <button class="active" data-f="all">Tudo</button>
+      <button data-f="ensaio">Ensaios</button>
+      <button data-f="festa">Festas</button>
+      <button data-f="video">Vídeos</button>
+    </div>
+  </div>
+</section>
+
+<section class="gallery">
+  <div class="wrap">
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<div class="lightbox" id="lb">
+  <button class="x" id="lbClose" aria-label="Fechar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button class="arrow prev" id="lbPrev" aria-label="Anterior">‹</button>
+  <img id="lbImg" src="" alt="" />
+  <button class="arrow next" id="lbNext" aria-label="Próxima">›</button>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="logo-txt">Momentto Rio</div>
+    <div class="tagline">Cada momentto merece ser eterno.</div>
+    <div class="links">
+      <a href="index.html">Início</a>
+      <a href="mailto:momenttorio@gmail.com">momenttorio@gmail.com</a>
+      <a href="https://instagram.com/momenttorio" target="_blank" rel="noopener">@momenttorio</a>
+      <a id="waFoot" href="#">WhatsApp</a>
+    </div>
+    <div class="base">© <span id="yr"></span> Momentto Rio Produções · Rio de Janeiro · www.momenttorio.com.br</div>
+  </div>
+</footer>
+
+<a class="wa" id="waFloat" href="#" aria-label="WhatsApp" target="_blank" rel="noopener">
+  <svg width="30" height="30" viewBox="0 0 32 32" fill="#fff"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.6L4 29l7.1-1.9c1.9 1 4 1.6 6.3 1.6h.1c6.9 0 12.5-5.6 12.5-12.5S23 3 16 3zm0 22.8c-2 0-3.9-.5-5.5-1.5l-.4-.2-4.2 1.1 1.1-4.1-.3-.4c-1.1-1.7-1.6-3.6-1.6-5.6 0-5.8 4.7-10.5 10.5-10.5S26.5 9.6 26.5 15.4 21.8 25.8 16 25.8zm5.8-7.8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2s-.8 1-1 1.2c-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-.9-.8-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7.1-.1.3-.4.5-.6.1-.2.2-.3.3-.6.1-.2 0-.4 0-.6s-.7-1.7-1-2.3c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.2-.6-.4z"/></svg>
+</a>
+
+<script>
+  // WhatsApp
+  var WHATSAPP="5521971864050";
+  var link="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent("Olá! Vim pelo portfólio e gostaria de solicitar um orçamento.");
+  ["ctaNav","waFoot","waFloat"].forEach(function(id){var e=document.getElementById(id);if(e){e.href=link;e.target="_blank";e.rel="noopener";}});
+  document.getElementById("yr").textContent=new Date().getFullYear();
+
+  // === fotos ===
+  // src local (dentro do repo) + fallback para a imagem ainda hospedada no Canva enquanto você não sobe as fotos
+  var CANVA="https://momenttorio.com.br/home/_assets";
+  var media=["0a5ec704bad5af1dc74d87d0e03eac36","5d4c3f0adf71eb0a43fa27d833dabd31","fa8e40e154c53f9ccf955959881df924","e57a355fbb2f00643bb79218f3563bdd","0a07cd4dc2c300eaac929bf48095eb7b","ded76b942744b059e069b4ea2665d5d8","c0686ed9b294046d970ca953b04e9a38","be0b054cfdb12c01bf1acb14cd4b9b3b","ab4f66a15dee779e6764b8e3ba66c333","102b1009373279764a259534e9d8fce9","127e6aa2b555d42be5b51f09818fd539","a88fcc466e3d0eda259032b7028efa92","e746e4766850e05e81fd6e4a87d49c90","d36bf90fa967d5791d2980704a5704df","70dfb83eb961a81dd2033ddc0b6614c1"];
+  var video=["e80510c67fdd72fa7abc6d1617f02672","fd9084c7b01ccb623f695b60f522a8aa","d9f7c21458460e07c15da97cfb354bb8","071b0da0f8e2becde4bc23102fba3c00"];
+  var photos=[];
+  var caps=["Ensaio","Festa","Debutante","Ensaio","Momentto","Festa","Ensaio","Debutante","Festa","Ensaio","Debutante","Festa","Ensaio","Debutante","Festa"];
+  var cats=["ensaio","festa","ensaio","ensaio","festa","festa","ensaio","festa","festa","ensaio","ensaio","festa","ensaio","festa","festa"];
+  media.forEach(function(id,i){photos.push({n:i+1,cap:caps[i]||"Momentto",cat:cats[i]||"ensaio",fb:CANVA+"/media/"+id+".jpg"});});
+  video.forEach(function(id,i){var n=media.length+i+1;photos.push({n:n,cap:"Vídeo",cat:"video",fb:CANVA+"/video/"+id+".jpg"});});
+
+  var grid=document.getElementById("grid");
+  photos.forEach(function(p){
+    var f=document.createElement("figure"); f.dataset.cat=p.cat; f.dataset.n=p.n;
+    var num=String(p.n).padStart(2,"0");
+    var img=document.createElement("img"); img.loading="lazy"; img.alt="Momentto Rio — "+p.cap;
+    img.src="portfolio/foto-"+num+".jpg"; img.dataset.fb=p.fb;
+    img.onerror=function(){ if(this.src!==this.dataset.fb){ this.src=this.dataset.fb; } };
+    var cap=document.createElement("figcaption"); cap.textContent=p.cap;
+    f.appendChild(img); f.appendChild(cap); grid.appendChild(f);
+  });
+
+  // filtros
+  document.querySelectorAll(".filters button").forEach(function(b){
+    b.addEventListener("click",function(){
+      document.querySelectorAll(".filters button").forEach(function(x){x.classList.remove("active")});
+      b.classList.add("active");
+      var f=b.dataset.f;
+      document.querySelectorAll("#grid figure").forEach(function(fig){
+        fig.style.display=(f==="all"||fig.dataset.cat===f)?"":"none";
+      });
+    });
+  });
+
+  // reveal
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:.08});
+  document.querySelectorAll("figure").forEach(function(f){io.observe(f)});
+
+  // lightbox
+  var lb=document.getElementById("lb"),lbImg=document.getElementById("lbImg"),cur=0,visible=[];
+  function open(n){
+    visible=[].slice.call(document.querySelectorAll("#grid figure")).filter(function(f){return f.style.display!=="none"});
+    cur=visible.findIndex(function(f){return +f.dataset.n===n});
+    show(); lb.classList.add("open");
+  }
+  function show(){var im=visible[cur].querySelector("img");lbImg.src=im.src;lbImg.alt=im.alt;}
+  function step(d){cur=(cur+d+visible.length)%visible.length;show();}
+  document.getElementById("grid").addEventListener("click",function(e){var f=e.target.closest("figure");if(f)open(+f.dataset.n);});
+  document.getElementById("lbClose").onclick=function(){lb.classList.remove("open")};
+  document.getElementById("lbNext").onclick=function(e){e.stopPropagation();step(1)};
+  document.getElementById("lbPrev").onclick=function(e){e.stopPropagation();step(-1)};
+  lb.addEventListener("click",function(e){if(e.target===lb)lb.classList.remove("open")});
+  document.addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")lb.classList.remove("open");if(e.key==="ArrowRight")step(1);if(e.key==="ArrowLeft")step(-1);});
+</script>
+</body>
+</html>
