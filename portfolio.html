@@ -64,8 +64,11 @@
     opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease);
   }
   figure.in{opacity:1;transform:none}
-  figure img{display:block;width:100%;height:auto;transition:transform .6s var(--ease);background:var(--cream-warm)}
-  figure:hover img{transform:scale(1.04)}
+  figure img,figure video{display:block;width:100%;height:auto;transition:transform .6s var(--ease);background:var(--cream-warm)}
+  figure:hover img,figure:hover video{transform:scale(1.04)}
+  figure .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(42,29,20,.55);display:flex;align-items:center;justify-content:center;color:var(--cream);pointer-events:none;transition:background .3s,transform .3s var(--ease)}
+  figure:hover .play{background:rgba(42,29,20,.78);transform:translate(-50%,-50%) scale(1.08)}
+  figure .play svg{margin-left:3px}
   figure figcaption{
     position:absolute;left:0;right:0;bottom:0;padding:26px 16px 14px;color:var(--cream);
     font-family:var(--display);font-style:italic;font-size:1.15rem;
@@ -78,7 +81,7 @@
     display:none;align-items:center;justify-content:center;padding:30px;
   }
   .lightbox.open{display:flex}
-  .lightbox img{max-width:92vw;max-height:88vh;border-radius:6px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7)}
+  .lightbox img,.lightbox video{max-width:92vw;max-height:88vh;border-radius:6px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7);background:#000}
   .lightbox .x,.lightbox .arrow{
     position:absolute;background:rgba(242,236,227,.14);border:none;color:var(--cream);cursor:pointer;
     width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s;
@@ -148,6 +151,7 @@
   </button>
   <button class="arrow prev" id="lbPrev" aria-label="Anterior">‹</button>
   <img id="lbImg" src="" alt="" />
+  <video id="lbVid" controls playsinline style="display:none"></video>
   <button class="arrow next" id="lbNext" aria-label="Próxima">›</button>
 </div>
 
@@ -176,26 +180,45 @@
   ["ctaNav","waFoot","waFloat"].forEach(function(id){var e=document.getElementById(id);if(e){e.href=link;e.target="_blank";e.rel="noopener";}});
   document.getElementById("yr").textContent=new Date().getFullYear();
 
-  // === fotos ===
+  // === FOTOS ===
   // src local (dentro do repo) + fallback para a imagem ainda hospedada no Canva enquanto você não sobe as fotos
   var CANVA="https://momenttorio.com.br/home/_assets";
   var media=["0a5ec704bad5af1dc74d87d0e03eac36","5d4c3f0adf71eb0a43fa27d833dabd31","fa8e40e154c53f9ccf955959881df924","e57a355fbb2f00643bb79218f3563bdd","0a07cd4dc2c300eaac929bf48095eb7b","ded76b942744b059e069b4ea2665d5d8","c0686ed9b294046d970ca953b04e9a38","be0b054cfdb12c01bf1acb14cd4b9b3b","ab4f66a15dee779e6764b8e3ba66c333","102b1009373279764a259534e9d8fce9","127e6aa2b555d42be5b51f09818fd539","a88fcc466e3d0eda259032b7028efa92","e746e4766850e05e81fd6e4a87d49c90","d36bf90fa967d5791d2980704a5704df","70dfb83eb961a81dd2033ddc0b6614c1"];
-  var video=["e80510c67fdd72fa7abc6d1617f02672","fd9084c7b01ccb623f695b60f522a8aa","d9f7c21458460e07c15da97cfb354bb8","071b0da0f8e2becde4bc23102fba3c00"];
-  var photos=[];
   var caps=["Ensaio","Festa","Debutante","Ensaio","Momentto","Festa","Ensaio","Debutante","Festa","Ensaio","Debutante","Festa","Ensaio","Debutante","Festa"];
   var cats=["ensaio","festa","ensaio","ensaio","festa","festa","ensaio","festa","festa","ensaio","ensaio","festa","ensaio","festa","festa"];
-  media.forEach(function(id,i){photos.push({n:i+1,cap:caps[i]||"Momentto",cat:cats[i]||"ensaio",fb:CANVA+"/media/"+id+".jpg"});});
-  video.forEach(function(id,i){var n=media.length+i+1;photos.push({n:n,cap:"Vídeo",cat:"video",fb:CANVA+"/video/"+id+".jpg"});});
+
+  // ===================== VÍDEOS =====================
+  // Suba seus arquivos .mp4 numa pasta "videos" do repositório e liste aqui.
+  // Adicione ou remova linhas conforme seus vídeos (a legenda é opcional).
+  // Se um arquivo não existir, o item some sozinho (não quebra a página).
+  var VIDEOS=[
+    {src:"videos/video1.mp4", cap:"Vídeo"},
+    {src:"videos/video2.mp4", cap:"Vídeo"},
+    {src:"videos/video3.mp4", cap:"Vídeo"}
+  ];
+  // ==================================================
+
+  var items=[];
+  media.forEach(function(id,i){items.push({n:i+1,type:"img",cap:caps[i]||"Momentto",cat:cats[i]||"ensaio",src:"portfolio/foto-"+String(i+1).padStart(2,"0")+".jpg",fb:CANVA+"/media/"+id+".jpg"});});
+  VIDEOS.forEach(function(v,i){items.push({n:1000+i,type:"video",cap:v.cap||"Vídeo",cat:"video",src:v.src});});
 
   var grid=document.getElementById("grid");
-  photos.forEach(function(p){
-    var f=document.createElement("figure"); f.dataset.cat=p.cat; f.dataset.n=p.n;
-    var num=String(p.n).padStart(2,"0");
-    var img=document.createElement("img"); img.loading="lazy"; img.alt="Momentto Rio — "+p.cap;
-    img.src="portfolio/foto-"+num+".jpg"; img.dataset.fb=p.fb;
-    img.onerror=function(){ if(this.src!==this.dataset.fb){ this.src=this.dataset.fb; } };
+  items.forEach(function(p){
+    var f=document.createElement("figure"); f.dataset.cat=p.cat; f.dataset.n=p.n; f.dataset.type=p.type;
+    if(p.type==="img"){
+      var img=document.createElement("img"); img.loading="lazy"; img.alt="Momentto Rio — "+p.cap;
+      img.src=p.src;
+      img.onerror=function(){ f.remove(); }; // foto ausente no repositório = some da galeria
+      f.appendChild(img);
+    } else {
+      var vid=document.createElement("video"); vid.src=p.src; vid.preload="metadata"; vid.muted=true; vid.playsInline=true;
+      vid.addEventListener("error",function(){ f.remove(); });
+      var play=document.createElement("span"); play.className="play";
+      play.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+      f.appendChild(vid); f.appendChild(play);
+    }
     var cap=document.createElement("figcaption"); cap.textContent=p.cap;
-    f.appendChild(img); f.appendChild(cap); grid.appendChild(f);
+    f.appendChild(cap); grid.appendChild(f);
   });
 
   // filtros
@@ -214,21 +237,31 @@
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:.08});
   document.querySelectorAll("figure").forEach(function(f){io.observe(f)});
 
-  // lightbox
-  var lb=document.getElementById("lb"),lbImg=document.getElementById("lbImg"),cur=0,visible=[];
+  // lightbox (foto e vídeo)
+  var lb=document.getElementById("lb"),lbImg=document.getElementById("lbImg"),lbVid=document.getElementById("lbVid"),cur=0,visible=[];
   function open(n){
     visible=[].slice.call(document.querySelectorAll("#grid figure")).filter(function(f){return f.style.display!=="none"});
     cur=visible.findIndex(function(f){return +f.dataset.n===n});
     show(); lb.classList.add("open");
   }
-  function show(){var im=visible[cur].querySelector("img");lbImg.src=im.src;lbImg.alt=im.alt;}
+  function show(){
+    var fig=visible[cur]; lbVid.pause();
+    if(fig.dataset.type==="video"){
+      lbImg.style.display="none"; lbVid.style.display="";
+      lbVid.src=fig.querySelector("video").src; lbVid.currentTime=0; var pr=lbVid.play(); if(pr&&pr.catch)pr.catch(function(){});
+    } else {
+      lbVid.style.display="none"; lbVid.removeAttribute("src");
+      var im=fig.querySelector("img"); lbImg.style.display=""; lbImg.src=im.src; lbImg.alt=im.alt;
+    }
+  }
   function step(d){cur=(cur+d+visible.length)%visible.length;show();}
+  function close(){lb.classList.remove("open"); lbVid.pause();}
   document.getElementById("grid").addEventListener("click",function(e){var f=e.target.closest("figure");if(f)open(+f.dataset.n);});
-  document.getElementById("lbClose").onclick=function(){lb.classList.remove("open")};
+  document.getElementById("lbClose").onclick=close;
   document.getElementById("lbNext").onclick=function(e){e.stopPropagation();step(1)};
   document.getElementById("lbPrev").onclick=function(e){e.stopPropagation();step(-1)};
-  lb.addEventListener("click",function(e){if(e.target===lb)lb.classList.remove("open")});
-  document.addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")lb.classList.remove("open");if(e.key==="ArrowRight")step(1);if(e.key==="ArrowLeft")step(-1);});
+  lb.addEventListener("click",function(e){if(e.target===lb)close()});
+  document.addEventListener("keydown",function(e){if(!lb.classList.contains("open"))return;if(e.key==="Escape")close();if(e.key==="ArrowRight")step(1);if(e.key==="ArrowLeft")step(-1);});
 </script>
 </body>
 </html>
